@@ -8,10 +8,11 @@ import com.angularspringboot.issuemanagement.util.TPage;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
-
+@Service
 public class IssueServiceImpl implements IssueService{
 
   private final IssueRepository issueRepository;
@@ -31,8 +32,9 @@ public class IssueServiceImpl implements IssueService{
     return modelMapper.map(issueDb, IssueDto.class);
   }
 
-  @Override public IssueDto geyById(Long id){
-    return null;
+  @Override public IssueDto getById(Long id){
+    Issue issue = issueRepository.getById(id);
+    return modelMapper.map(issue, IssueDto.class);
   }
 
   @Override public TPage<IssueDto> getAllPageable(Pageable pageable){
@@ -43,7 +45,25 @@ public class IssueServiceImpl implements IssueService{
     return page;
   }
 
-  @Override public Boolean delete(IssueDto issue){
-    return null;
+  @Override public Boolean delete(Long id){
+    issueRepository.deleteById(id);
+    return true;
+  }
+
+  @Override public IssueDto update(Long id, IssueDto issueDto){
+    Issue issue = issueRepository.getOne(id);
+
+    if (issue.getId() == null)
+      throw new IllegalArgumentException("Issue cannot be null");
+
+    if (issueDto.getDate() == null)
+      throw new IllegalArgumentException("Issue cannot be null");
+
+    issue.setDate(issueDto.getDate());
+    issue.setDescription(issueDto.getDescription());
+    issue.setDetails(issueDto.getDetails());
+    issue.setIssueStatus(issueDto.getIssueStatus());
+    issueRepository.save(issue);
+    return modelMapper.map(issue, IssueDto.class);
   }
 }

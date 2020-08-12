@@ -3,6 +3,7 @@ package com.angularspringboot.issuemanagement.api;
 import com.angularspringboot.issuemanagement.dto.ProjectDto;
 import com.angularspringboot.issuemanagement.entity.Project;
 import com.angularspringboot.issuemanagement.service.impl.ProjectServiceImpl;
+import com.angularspringboot.issuemanagement.util.ApiPaths;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import javax.validation.Valid;
 
 
 @RestController
-@RequestMapping("/project")
+@RequestMapping(ApiPaths.ProjectCtrl.CTRL)
 public class ProjectController{
 
   private final ProjectServiceImpl projectServiceImpl;

@@ -4,11 +4,13 @@ import com.angularspringboot.issuemanagement.dto.ProjectDto;
 import com.angularspringboot.issuemanagement.entity.Project;
 import com.angularspringboot.issuemanagement.repository.ProjectRepository;
 import com.angularspringboot.issuemanagement.service.ProjectService;
+import com.angularspringboot.issuemanagement.util.TPage;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,8 +42,11 @@ public class ProjectServiceImpl implements ProjectService{
   }
 
   @Override
-  public Page<ProjectDto> getAllPageable(Pageable pageable) {
-    return null;
+  public TPage<ProjectDto> getAllPageable(Pageable pageable) {
+    Page<Project> data = projectRepository.findAll(pageable);
+    TPage<ProjectDto> response = new TPage<>();
+    response.setStat(data, Arrays.asList(modelMapper.map(data.getContent(), ProjectDto[].class )));
+    return response;
   }
 
   @Override public ProjectDto getByProjectCode(String projectCode){

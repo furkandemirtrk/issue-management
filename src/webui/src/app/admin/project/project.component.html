@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="overview-wrap">
+            <h2 class="title-1">Projects</h2>
+        </div>
+    </div>
+</div>
+<div class="row m-t-30">
+    <div class="col-md-12">
+        <h5>Programmatic Control</h5>
+        <ngx-datatable
+                class="bootstrap"
+                [rows]="projects"
+                [columns]="columns"
+                [columnMode]="'force'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                rowHeight="auto"
+                [externalPaging]="true"
+                [count]="page.totalElements"
+                [offset]="page.page"
+                [limit]="10"
+                (page)="setPage($event)"
+        >
+        </ngx-datatable>
+    </div>
+</div>

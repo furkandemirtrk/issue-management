@@ -1,19 +1,62 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {IssueComponent} from "./pages/issue/issue.component";
-import {DashboardComponent} from "./pages/dashboard/dashboard.component";
-import {ProjectComponent} from "./pages/project/project.component";
+import {DashboardComponent} from "./admin/dashboard/dashboard.component";
+import {IssueComponent} from "./admin/issue/issue.component";
+import {ProjectComponent} from "./admin/project/project.component";
 
 const routes: Routes = [
     {
         path: '',
+        component: DashboardComponent,
+        data: {
+            title: 'Home'
+        },
         children: [
-            {path: '', pathMatch: 'full', redirectTo: 'dashboard'},
-            {path: 'issue', component: IssueComponent},
-            {path: 'dashboard', component: DashboardComponent},
-            {path: 'project', component: ProjectComponent},
+            {
+                path: 'admin',
+                loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+            },
         ]
-    }
+    },
+    {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: {
+            title: 'Dashboard'
+        },
+        children: [
+            {
+                path: 'admin',
+                loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+            },
+        ]
+    },
+    {
+        path: 'issue',
+        component: IssueComponent,
+        data: {
+            title: 'Issue'
+        },
+        children: [
+            {
+                path: 'admin',
+                loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+            },
+        ]
+    },
+    {
+        path: 'project',
+        component: ProjectComponent,
+        data: {
+            title: 'Project'
+        },
+        children: [
+            {
+                path: 'admin',
+                loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+            },
+        ]
+    },
 ];
 
 @NgModule({

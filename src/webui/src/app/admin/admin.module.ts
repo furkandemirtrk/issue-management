@@ -7,13 +7,20 @@ import {ProjectComponent} from "./project/project.component";
 import {IssueService} from "../services/shared/issue.service";
 import {ProjectService} from "../services/shared/project.service";
 import {NgxDatatableModule} from "@swimlane/ngx-datatable";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {SharedModule} from "../shared/shared.module";
+import {AdminRouting} from "./admin.routing";
 
 
 @NgModule({
     declarations: [AdminComponent, DashboardComponent, IssueComponent, ProjectComponent],
     imports: [
         CommonModule,
-        NgxDatatableModule
+        AdminRouting,
+        NgxDatatableModule,
+        FormsModule,
+        ReactiveFormsModule,
+        SharedModule
     ],
     providers: [IssueService, ProjectService]
 })

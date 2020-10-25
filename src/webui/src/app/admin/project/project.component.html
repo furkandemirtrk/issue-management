@@ -6,8 +6,7 @@
     </div>
 </div>
 <div class="row m-t-30">
-    <div class="col-md-12">
-        <h5>Programmatic Control</h5>
+    <div class="col-md-6">
         <ngx-datatable
                 class="bootstrap"
                 [rows]="projects"
@@ -23,5 +22,41 @@
                 (page)="setPage($event)"
         >
         </ngx-datatable>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <form [formGroup]="projectForm" (ngSubmit)="saveForm()">
+            <div class="card-header">
+                <strong>Project</strong> Create
+            </div>
+            <div class="card-body card-block">
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label class=" form-control-label">Project Code</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <input type="text" formControlName="projectCode" placeholder="Project Code" class="form-control" [ngClass]="{'is-invalid': f.projectCode.errors}" />
+                        <small *ngIf="f.projectCode.errors?.required" class="form-text text-muted">This area is required</small>
+                        <small *ngIf="f.projectCode.errors?.minlength" class="form-text text-muted">This area should be min 2 char</small>
+                        <small *ngIf="f.projectCode.errors?.maxlength" class="form-text text-muted">This area should be max 10 char</small>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label class="form-control-label">Project Name</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <input type="text" formControlName="projectName" placeholder="Project Name" class="form-control" [ngClass]="{'is-invalid': f.projectName.errors}" />
+                        <small *ngIf="f.projectName.errors?.required" class="form-text text-muted">This area is required</small>
+                        <small *ngIf="f.projectCode.errors?.minlength" class="form-text text-muted">This area should be min 4 char</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success btn-sm" style="margin-right:5px ">Save</button>
+                <button type="reset" class="btn btn-danger btn-sm" (click)="resetForm()">Reset</button>
+            </div>
+            </form>
+        </div>
     </div>
 </div>

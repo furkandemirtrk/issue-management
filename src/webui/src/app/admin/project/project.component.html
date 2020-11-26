@@ -1,33 +1,47 @@
 <div class="row">
     <div class="col-md-12">
         <div class="overview-wrap">
-            <h2 class="title-1">Projects</h2>
+            <h2 class="title-1">{{'Project List' | translate}}</h2>
         </div>
     </div>
 </div>
 <div class="row m-t-30">
     <div class="col-md-6">
-        <ngx-datatable
-                class="bootstrap"
-                [rows]="projects"
-                [columns]="columns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                rowHeight="auto"
-                [externalPaging]="true"
-                [count]="page.totalElements"
-                [offset]="page.page"
-                [limit]="10"
-                (page)="setPage($event)"
-        >
-        </ngx-datatable>
+        <div class="table-responsive m-b-40">
+        <p-table [value]="projects" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" class="table table-borderless table-data3"
+                 currentPageReportTemplate="" [rowsPerPageOptions]="[10,25,50]">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Project Name</th>
+                    <th>Project Code</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-value>
+                <tr>
+                    <td>{{value.id}}</td>
+                    <td>{{value.projectName}}</td>
+                    <td>{{value.projectCode}}</td>
+                    <td>
+                        <button type="button" (click)="showDeleteConfirmation(value.id)"><i class="pi pi-trash" style="font-size: 26px; color:#dc3545"></i></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft">
+                <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+                <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+            </ng-template>
+        </p-table>
+        </div>
     </div>
     <div class="col-md-6">
         <div class="card">
             <form [formGroup]="projectForm" (ngSubmit)="saveForm()">
             <div class="card-header">
-                <strong>Project</strong> Create
+                <strong>{{ "Project" | translate}}</strong> {{ "Create" | translate}}
             </div>
             <div class="card-body card-block">
                 <div class="row form-group">

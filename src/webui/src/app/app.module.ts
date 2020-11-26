@@ -15,6 +15,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {AppLayoutComponent} from "./_layout/app-layout/app-layout.component";
+import {ModalModule} from "ngx-bootstrap/modal";
+import {ConfirmationComponent} from "./shared/confirmation/confirmation.component";
 
 export const createTranslateLoader = (http: HttpClient) => {
     return new TranslateHttpLoader(http, './assets/i18n/','.json');
@@ -47,10 +49,13 @@ const APP_CONTAINERS = [
                 useFactory: createTranslateLoader,
                 deps: [HttpClient]
             }
-        })
+        }),
+        BrowserModule,
+        ModalModule.forRoot()
     ],
     providers: [ApiService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [ConfirmationComponent]
 })
 export class AppModule {
 }

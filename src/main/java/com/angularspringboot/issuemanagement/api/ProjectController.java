@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -33,6 +34,13 @@ public class ProjectController{
     log.info("ProjectController getAllByPagination");
     TPage<ProjectDto> allPageable = projectServiceImpl.getAllPageable(pageable);
     return ResponseEntity.ok(allPageable);
+  }
+
+  @GetMapping("/all")
+  @ApiOperation(value = "Get By Pagination Operation", response = ProjectDto.class)
+  public ResponseEntity<List<ProjectDto>> getAll(){
+    log.info("ProjectController getAll");
+    return projectServiceImpl.getAll();
   }
 
   @GetMapping("/{id}")
@@ -58,7 +66,7 @@ public class ProjectController{
     return ResponseEntity.ok(projectServiceImpl.update(id,projectDto));
   }
 
-  @DeleteMapping("/{id}")
+  @PostMapping("/delete/{id}")
   @ApiOperation(value = "Delete Operation", response = Boolean.class)
   public ResponseEntity<Boolean> deleteProject(@PathVariable("id") Long id){
     log.info("ProjectController deleteProject");

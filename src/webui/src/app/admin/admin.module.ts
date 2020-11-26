@@ -10,6 +10,10 @@ import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {AdminRouting} from "./admin.routing";
+import {TableModule} from "primeng/table";
+import {ButtonModule} from "primeng/button";
+import {UserService} from "../services/shared/user.service";
+import {IssueHistoryService} from "../services/shared/issue.history.service";
 
 
 @NgModule({
@@ -20,9 +24,11 @@ import {AdminRouting} from "./admin.routing";
         NgxDatatableModule,
         FormsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
+        TableModule,
+        ButtonModule
     ],
-    providers: [IssueService, ProjectService]
+    providers: [IssueService, ProjectService, UserService, IssueHistoryService]
 })
 export class AdminModule {
 }

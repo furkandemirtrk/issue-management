@@ -8,6 +8,7 @@ import com.angularspringboot.issuemanagement.util.TPage;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -33,6 +34,12 @@ public class ProjectServiceImpl implements ProjectService{
     Project project = modelMapper.map(projectDto, Project.class);
     Project projectSave = projectRepository.save(project);
     return modelMapper.map(projectSave, ProjectDto.class);
+  }
+
+  @Override
+  public ResponseEntity<List<ProjectDto>> getAll(){
+    List<Project> projectList = projectRepository.findAll();
+    return ResponseEntity.ok(Arrays.asList(modelMapper.map(projectList, ProjectDto[].class)));
   }
 
   @Override

@@ -1,29 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ProjectService} from "../../services/shared/project.service";
 import {Project} from "../../common/project.model";
 import {Page} from "../../common/page";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {BsModalService} from "ngx-bootstrap/modal";
+import {ConfirmationComponent} from "../../shared/confirmation/confirmation.component";
 
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html'
 })
 export class ProjectComponent implements OnInit {
-  page = new Page();
   projects: Project[];
   selected = [];
-  columns= [
-    {prop:'id', name:'No'},
-    {prop:'projectName', name:'Project Name'},
-    {prop:'projectCode', name:'Project Code'}
-  ];
   projectForm: FormGroup;
+  rows = 10;
+  first = 0;
 
-  constructor(private projectService: ProjectService, private formBuilder: FormBuilder) {
+  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private modalService: BsModalService) {
   }
 
   ngOnInit(): void {
-    this.setPage({offset: 0});
+    this.setPage();
     this.projectForm = this.formBuilder.group({
       'projectName': [null,
         [Validators.required,
@@ -35,7 +33,9 @@ export class ProjectComponent implements OnInit {
         Validators.minLength(4)]
       ],
     });
+
   }
+
 
   get f() {
     return this.projectForm.controls
@@ -54,48 +54,53 @@ export class ProjectComponent implements OnInit {
           console.log(response);
         }
     );
-    this.setPage(this.page);
     this.resetForm();
   }
 
-  setPage(pageInfo) {
-    console.log(pageInfo);
-    this.page.page = pageInfo.offset;
-    if (this.page.page != 0){
-      this.page.size = pageInfo.limit;
-    }
-    this.projectService.getAll(this.page).subscribe(
+  setPage() {
+    this.projectService.getAll().subscribe(
         res => {
-          this.page.size = res.size;
-          this.page.page = res.page;
-          this.page.totalPages = res.totalPages;
-          this.page.totalElements = res.totalElements;
-          this.projects = res.content;
-          console.log(res);
+          this.projects = res;
         }
     );
   }
 
 
   next() {
-    console.log(this.page);
-    this.page.page = this.page.page + 1;
+    this.first = this.first + this.rows;
   }
 
   prev() {
-    this.page.page = this.page.page - 2;
+    this.first = this.first - this.rows;
   }
 
   reset() {
-    this.page.page = 0;
+    this.first = 0;
   }
 
   isLastPage(): boolean {
-    return this.projects ? this.page.page === (this.projects.length - this.page.size): true;
+    return this.projects ? this.first === (this.projects.length - this.rows): true;
   }
 
   isFirstPage(): boolean {
-    return this.projects ? this.page.page === 0 : true;
+    return this.projects ? this.first === 0 : true;
+  }
+
+  showDeleteConfirmation(value){
+    const modal = this.modalService.show(ConfirmationComponent);
+    (<ConfirmationComponent>modal.content).showConfirmation('Delete Confirmation','Are you sure for delete project?');
+    (<ConfirmationComponent>modal.content).onClose.subscribe(result => {
+      if (result  === true){
+        this.projectService.deleteProject(value).subscribe(response => {
+          console.log(response);
+          if (response === true){
+            this.setPage();
+          }
+        });
+      } else if (result ===false){
+        console.log('no');
+      }
+    });
   }
 
 }

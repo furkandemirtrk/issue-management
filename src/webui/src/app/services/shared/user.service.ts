@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {ApiService} from "../api.service";
 import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
+import {User} from "../../common/user.model";
 
 @Injectable({
     providedIn: "root"
@@ -39,7 +40,7 @@ export class UserService {
         ));
     }
 
-    createProject(user): Observable<any>{
+    createUser(user): Observable<any>{
         return this.apiService.post(this.USER_PATH,user).pipe(map(
             response => {
                 if (response) {
@@ -52,7 +53,7 @@ export class UserService {
         ));
     }
 
-    deleteProject(id): Observable<any> {
+    deleteUser(id): Observable<any> {
         return this.apiService.post(this.USER_PATH+'/delete/'+id).pipe(map(
             response => {
                 if (response) {

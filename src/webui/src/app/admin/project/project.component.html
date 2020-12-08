@@ -15,6 +15,7 @@
                     <th>Id</th>
                     <th>Project Name</th>
                     <th>Project Code</th>
+                    <th>Project Manager</th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -23,7 +24,9 @@
                     <td>{{value.id}}</td>
                     <td>{{value.projectName}}</td>
                     <td>{{value.projectCode}}</td>
+                    <td>{{value.manager != null ? value.manager.nameSurname : ''}}</td>
                     <td>
+                        <button type="button" (click)="updateForm(value)"><i class="pi pi-undo" style="font-size: 26px; color:#3542dc"></i></button>
                         <button type="button" (click)="showDeleteConfirmation(value.id)"><i class="pi pi-trash" style="font-size: 26px; color:#dc3545"></i></button>
                     </td>
                 </tr>
@@ -63,6 +66,30 @@
                         <input type="text" formControlName="projectName" placeholder="Project Name" class="form-control" [ngClass]="{'is-invalid': f.projectName.errors}" />
                         <small *ngIf="f.projectName.errors?.required" class="form-text text-muted">This area is required</small>
                         <small *ngIf="f.projectCode.errors?.minlength" class="form-text text-muted">This area should be min 4 char</small>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label class="form-control-label">Project Manager</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <ng-autocomplete
+                                #managerAutoComplete
+                                placeHolder="Project Manager"
+                                [data]="managerList"
+                                [searchKeyword]="keyword"
+                                (selected)='selectEvent($event)'
+                                (inputChanged)='onChangeSearch($event)'
+                                [itemTemplate]="itemTemplate"
+                                [notFoundTemplate]="notFoundTemplate">
+                        </ng-autocomplete>
+
+                        <ng-template #itemTemplate let-item>
+                            <a [innerHTML]="item.nameSurname + ' | ' + item.username"></a>
+                        </ng-template>
+                        <ng-template #notFoundTemplate let-notFound>
+                            <div [innerHTML]="notFound"></div>
+                        </ng-template>
                     </div>
                 </div>
             </div>

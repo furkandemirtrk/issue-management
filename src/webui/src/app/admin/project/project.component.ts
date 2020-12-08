@@ -5,6 +5,9 @@ import {Page} from "../../common/page";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {BsModalService} from "ngx-bootstrap/modal";
 import {ConfirmationComponent} from "../../shared/confirmation/confirmation.component";
+import {UserService} from "../../services/shared/user.service";
+import {User} from "../../common/user.model";
+import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 
 @Component({
   selector: 'app-project',
@@ -16,8 +19,13 @@ export class ProjectComponent implements OnInit {
   projectForm: FormGroup;
   rows = 10;
   first = 0;
+  managerList: User[] = [];
+  keyword = 'nameSurname';
+  editMode: boolean = false;
+  updateManager: User;
+  @ViewChild('managerAutoComplete') managerAutoComplete: any;
 
-  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private modalService: BsModalService) {
+  constructor(private projectService: ProjectService, private formBuilder: FormBuilder, private modalService: BsModalService, private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -29,11 +37,14 @@ export class ProjectComponent implements OnInit {
       ],
       'projectCode': [null,[
         Validators.required,
-        Validators.maxLength(10),
+        Validators.maxLength(20),
         Validators.minLength(4)]
       ],
+      'manager': [null,
+        [Validators.required]
+      ]
     });
-
+    this.getUsers();
   }
 
 
@@ -48,13 +59,30 @@ export class ProjectComponent implements OnInit {
   saveForm(){
     if (!this.projectForm.valid)
       return;
-
-    this.projectService.createProject(this.projectForm.value).subscribe(
-        response => {
-          console.log(response);
-        }
-    );
+    if (this.editMode){
+      this.projectService.updateProject(this.projectForm.value).subscribe(
+          response => {
+            console.log(response);
+          }
+      );
+    }else{
+      this.projectService.createProject(this.projectForm.value).subscribe(
+          response => {
+            console.log(response);
+          }
+      );
+    }
     this.resetForm();
+  }
+
+  updateForm(item : Project){
+    this.editMode = true;
+    this.projectForm.setValue({
+      projectName: item.projectName,
+      projectCode: item.projectCode,
+      manager: item.manager
+    });
+    console.log(this.projectForm.value);
   }
 
   setPage() {
@@ -102,5 +130,26 @@ export class ProjectComponent implements OnInit {
       }
     });
   }
+
+  getUsers(){
+    this.userService.getAll().subscribe( response => {
+      this.managerList = response;
+    });
+  }
+
+  selectEvent(item) {
+    this.updateManager = item;
+    this.projectForm.patchValue({
+      'manager' : item
+    });
+    console.log(this.projectForm.value);
+    // do something with selected item
+  }
+
+  onChangeSearch(val: string) {
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+
 
 }

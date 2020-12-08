@@ -14,6 +14,8 @@ import {TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {UserService} from "../services/shared/user.service";
 import {IssueHistoryService} from "../services/shared/issue.history.service";
+import {AutoCompleteModule} from "primeng/autocomplete";
+import {AutocompleteLibModule} from "angular-ng-autocomplete";
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import {IssueHistoryService} from "../services/shared/issue.history.service";
         ReactiveFormsModule,
         SharedModule,
         TableModule,
-        ButtonModule
+        ButtonModule,
+        AutoCompleteModule,
+        AutocompleteLibModule
     ],
     providers: [IssueService, ProjectService, UserService, IssueHistoryService]
 })

@@ -52,6 +52,19 @@ export class ProjectService {
         ));
     }
 
+    updateProject(project): Observable<any>{
+        return this.apiService.post(this.PROJECT_PATH+"/"+ project.id , project).pipe(map(
+            response => {
+                if (response) {
+                    return response;
+                } else {
+                    console.log(response);
+                    return null;
+                }
+            }
+        ));
+    }
+
     deleteProject(id): Observable<any> {
         return this.apiService.post(this.PROJECT_PATH+'/delete/'+id).pipe(map(
             response => {

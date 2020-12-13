@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {User} from "../../common/user.model";
+import {UserService} from "../../services/shared/user.service";
 
 @Component({
   selector: 'app-header',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  username:string;
   constructor() { }
 
   ngOnInit(): void {
+    this.username = JSON.parse(localStorage.getItem('currentUser')).username;
   }
 
 }

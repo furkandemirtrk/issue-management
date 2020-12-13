@@ -1,27 +1,33 @@
 package com.angularspringboot.issuemanagement.service.impl;
 
+import com.angularspringboot.issuemanagement.dto.RegistrationRequest;
 import com.angularspringboot.issuemanagement.dto.UserDto;
 import com.angularspringboot.issuemanagement.entity.User;
 import com.angularspringboot.issuemanagement.repository.UserRepository;
 import com.angularspringboot.issuemanagement.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService{
 
   private final UserRepository userRepository;
   private final ModelMapper modelMapper;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper){
+  public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder){
     this.userRepository = userRepository;
     this.modelMapper = modelMapper;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
   }
 
   @Override
@@ -79,5 +85,27 @@ public class UserServiceImpl implements UserService{
       return false;
     }
     return true;
+  }
+
+  @Override
+  public User findByUsername(String username){
+    return userRepository.findByUsername(username);
+  }
+
+  @Transactional
+  public Boolean register(RegistrationRequest registrationRequest){
+    User user = null;
+    try {
+      user = new User();
+      user.setUsername(registrationRequest.getUsername());
+      user.setNameSurname(registrationRequest.getNameSurname());
+      user.setEmail(registrationRequest.getEmail());
+      user.setPassword(bCryptPasswordEncoder.encode(registrationRequest.getPassword()));
+      userRepository.save(user);
+      return Boolean.TRUE;
+    } catch (Exception e) {
+      log.error("register ", e);
+      return Boolean.FALSE;
+    }
   }
 }

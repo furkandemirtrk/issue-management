@@ -15,4 +15,5 @@ public interface UserService{
   Page<User> getAllPageable(Pageable pageable);
   List<UserDto> getAll();
   Boolean delete(Long id);
+  User findByUsername(String username);
 }

@@ -1,11 +1,14 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {AppLayoutComponent} from "./_layout/app-layout/app-layout.component";
+import {AuthGuard} from "./security/auth-guard";
+import {LoginComponent} from "./login/login.component";
 
 const routes: Routes = [
     {
         path: '',
         component: AppLayoutComponent,
+        canActivate: [AuthGuard],
         data: {
             title: 'Home'
         },
@@ -16,6 +19,7 @@ const routes: Routes = [
             },
         ]
     },
+    {path:'login', component: LoginComponent}
 ];
 
 @NgModule({
